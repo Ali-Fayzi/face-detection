@@ -8,12 +8,14 @@ from detections_models.retinaface.face_detection import Retina_Face_Detection
 from detections_models.mtcnn.face_detection import MTCNN_Face_Detection
 
 if __name__ == "__main__":
-    image_path     = r"D:\Personal_Project\Github_Project\face-recognition-repo\test_images\1.png"
+    image_path     = r"./test_images/1.png"
     image          = cv2.imread(image_path)
     image          = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     # create opencv face detection instance
-    face_detection_model = "mtcnn"#opencv,yolo,retinaface,mtcnn
-    
+    face_detection_models = ["opencv","yolo","retinaface","mtcnn"]
+
+    face_detection_model = face_detection_models[-1]
+
     if face_detection_model == "opencv":
         face_detection = Opencv_Face_Detection()
         image, bboxes, crops = face_detection.detect(image=image,return_crops=True,draw_bbox=True)
