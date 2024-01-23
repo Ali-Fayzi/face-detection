@@ -1,11 +1,9 @@
-import warnings
-warnings.filterwarnings("ignore")
 import cv2
 from matplotlib import pyplot as plt  
-from detections_models.opencv.face_detection import Opencv_Face_Detection
-from detections_models.yolov8_face.face_detection import Yolo_Face_Detection
-from detections_models.retinaface.face_detection import Retina_Face_Detection
-from detections_models.mtcnn.face_detection import MTCNN_Face_Detection
+from face_detection.detections_models.opencv.face_detection import Opencv_Face_Detection
+from face_detection.detections_models.yolov8_face.face_detection import Yolo_Face_Detection
+from face_detection.detections_models.retinaface.face_detection import Retina_Face_Detection
+from face_detection.detections_models.mtcnn.face_detection import MTCNN_Face_Detection
 
 
 class Face_Detection:
@@ -25,11 +23,11 @@ class Face_Detection:
 
     def detect(self, image, return_crops=False, return_keypoints=False, draw_bbox=False,draw_keypoint=False):
         if self.model_name != "opencv":
-            image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=return_crops,return_keypoints=return_keypoints,draw_bbox=draw_bbox,draw_keypoint=draw_keypoint)
-            return image, bboxes, keypoints, crops 
+            image, bboxes, keypoints, crops  = self.face_detection.detect(image=image,return_crops=return_crops,return_keypoints=return_keypoints,draw_bbox=draw_bbox,draw_keypoint=draw_keypoint)
         else:
-            image, bboxes, crops = self.face_detection.detect(image=image,return_crops=return_crops,draw_bbox=draw_bbox)
-            return image, bboxes, crops 
+            image, bboxes, crops             = self.face_detection.detect(image=image,return_crops=return_crops,draw_bbox=draw_bbox)
+            keypoints = []
+        return image, bboxes,keypoints, crops 
 
 if __name__ == "__main__":
     image_path     = r"./test_images/1.png"
