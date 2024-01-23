@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("Face Detection Model")
     fig = plt.figure(figsize=(20, 10))
     
-    # create opencv face detection instance
+    # create face detection instance
     face_detection_models = ["opencv", "yolo", "retinaface", "mtcnn"]
     
     for idx, face_detector in enumerate(face_detection_models):
