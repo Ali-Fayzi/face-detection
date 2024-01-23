@@ -27,48 +27,75 @@ if __name__ == "__main__":
 
     elif face_detection_model == "yolo":
         face_detection = Yolo_Face_Detection()
-        image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=True,return_keypoints=False,draw_bbox=True,draw_keypoint=True)
-        for keypoint in keypoints:
+        image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=True,return_keypoints=True,draw_bbox=True,draw_keypoint=True)
+        for keypoint,box in zip(keypoints,bboxes):
+            x1,y1,x2,y2 = box
             for key in keypoint:
-                center_coordinates = (key[0], key[1]) 
+                center_coordinates = (key[0]+x1, key[1]+y1) 
                 radius = 2
                 color = (255, 0, 0) 
                 thickness = -1
                 image = cv2.circle(image, center_coordinates, radius, color, thickness) 
         plt.imshow(image,cmap='gray')
         plt.show()
-        for crop in crops:
+
+        for crop ,keypoint in zip(crops,keypoints):
+            for key in keypoint:
+                center_coordinates = (key[0], key[1]) 
+                radius = 2
+                color = (255, 0, 0) 
+                thickness = -1
+                crop = cv2.circle(crop, center_coordinates, radius, color, thickness)
+
             plt.imshow(crop,cmap='gray')
             plt.show()  
     elif face_detection_model == "retinaface":
         face_detection = Retina_Face_Detection()
-        image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=True,return_keypoints=False,draw_bbox=True,draw_keypoint=True)
-        for keypoint in keypoints:
+        image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=True,return_keypoints=True,draw_bbox=True,draw_keypoint=True)
+        for keypoint,box in zip(keypoints,bboxes):
+            x1,y1,x2,y2 = box
             for key in keypoint:
-                center_coordinates = (key[0], key[1]) 
+                center_coordinates = (key[0]+x1, key[1]+y1) 
                 radius = 2
                 color = (255, 0, 0) 
                 thickness = -1
                 image = cv2.circle(image, center_coordinates, radius, color, thickness) 
         plt.imshow(image,cmap='gray')
         plt.show()
-        for crop in crops:
+
+        for crop ,keypoint in zip(crops,keypoints):
+            for key in keypoint:
+                center_coordinates = (key[0], key[1]) 
+                radius = 2
+                color = (255, 0, 0) 
+                thickness = -1
+                crop = cv2.circle(crop, center_coordinates, radius, color, thickness)
+
             plt.imshow(crop,cmap='gray')
             plt.show()  
       
     elif face_detection_model == "mtcnn":
         face_detection = MTCNN_Face_Detection()
         image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=True,return_keypoints=True,draw_bbox=True,draw_keypoint=True)
-        for keypoint in keypoints:
+        for keypoint,box in zip(keypoints,bboxes):
+            x1,y1,x2,y2 = box
             for key in keypoint:
-                center_coordinates = (key[0], key[1]) 
+                center_coordinates = (key[0]+x1, key[1]+y1) 
                 radius = 2
                 color = (255, 0, 0) 
                 thickness = -1
                 image = cv2.circle(image, center_coordinates, radius, color, thickness) 
         plt.imshow(image,cmap='gray')
         plt.show()
-        for crop in crops:
+
+        for crop ,keypoint in zip(crops,keypoints):
+            for key in keypoint:
+                center_coordinates = (key[0], key[1]) 
+                radius = 2
+                color = (255, 0, 0) 
+                thickness = -1
+                crop = cv2.circle(crop, center_coordinates, radius, color, thickness)
+
             plt.imshow(crop,cmap='gray')
             plt.show()  
       

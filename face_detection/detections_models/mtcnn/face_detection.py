@@ -27,7 +27,8 @@ class MTCNN_Face_Detection:
             keypoint    = [ (int(item[0]),int(item[1])) for item in point]
             bboxes.append([x1,y1,x2,y2])
             if return_keypoints:
-                keypoints.append(keypoint)
+                return_keys=[[key[0]-x1 , key[1]-y1] for key in keypoint]
+                keypoints.append(return_keys)
             if return_crops:
                 crop_x1 = max(x1,0)
                 crop_y1 = max(y1,0)
