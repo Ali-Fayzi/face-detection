@@ -14,6 +14,7 @@ class Retina_Face_Detection:
     def __init__(self):
         self.model = get_model("resnet50_2020-07-20", max_size=2048)
         self.model.eval()
+        self.warmup()
 
     def warmup(self):
         input = np.ones((640,640,3))
