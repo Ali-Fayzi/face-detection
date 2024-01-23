@@ -7,12 +7,11 @@ from face_recognition.recognitions_models.openface.check_weight import check_wei
 class OpenFace:
     def __init__(self):
         self.useCuda = True if torch.cuda.is_available() else False
-        gpuDevice = 0 if self.useCuda else None
-        self.device  = torch.device("cuda" if self.useCuda else "cpu")
-
+        self.device  = torch.device(f"cuda" if self.useCuda else "cpu")
         weight_path = check_weight_exists()
-        self.model = netOpenFace(self.useCuda, gpuDevice)
+        self.model = netOpenFace(self.device).to(self.device)
         self.model.load_state_dict(torch.load(weight_path))
+        
         self.model.eval()
     
     def preprocess(self,image):
@@ -22,7 +21,7 @@ class OpenFace:
         image = image.astype(np.float32) / 255.0 
         input = torch.from_numpy(image).unsqueeze(0)
         if self.useCuda:
-            input = input.cuda()
+            input = input.to(self.device)
         return input 
     def predict(self,image):
         input = self.preprocess(image)
