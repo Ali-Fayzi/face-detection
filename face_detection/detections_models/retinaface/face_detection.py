@@ -6,6 +6,7 @@ pip install -U retinaface_pytorch
 
 """
 import cv2
+import numpy as np 
 from retinaface.pre_trained_models import get_model
 
 
@@ -14,6 +15,10 @@ class Retina_Face_Detection:
         self.model = get_model("resnet50_2020-07-20", max_size=2048)
         self.model.eval()
 
+    def warmup(self):
+        input = np.ones((640,640,3))
+        self.model.predict_jsons(input)
+        print("Retina Model Warmup Is Done!")
     def detect(self, image, return_crops=False, return_keypoints=False, draw_bbox=False,draw_keypoint=False):
         
         bboxes      = []
