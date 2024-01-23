@@ -30,9 +30,19 @@ if __name__ == "__main__":
         face_alignment = Simple_Alignment()
         for face , keypoint in zip(crops,keypoints):
             main_face , aligned_face = face_alignment.align(face,keypoint)
+<<<<<<< HEAD
             plt.subplot(1,2,1)
             plt.imshow(face,cmap='gray')
             plt.subplot(1,2,2)
             plt.imshow(aligned_face,cmap='gray')
+=======
+
+            plt.subplot(1,2,1)
+            plt.imshow(face,cmap='gray')
+
+            plt.subplot(1,2,2)
+            plt.imshow(aligned_face,cmap='gray')
+
+>>>>>>> 735fded3332f79ebec30e847b432c347c3cfbd2e
             plt.show()
 
