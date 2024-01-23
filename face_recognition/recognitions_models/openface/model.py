@@ -5,12 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-import torch.backends.cudnn as cudnn
 from collections import OrderedDict
-import os
-import time
-import pathlib
-import torch
 
 from torch.nn.modules import CrossMapLRN2d
 
@@ -40,13 +35,13 @@ def BatchNorm(dim):
     l = torch.nn.BatchNorm2d(dim)
     return l
 
-def CrossMapLRN(size, alpha, beta, k=1.0, gpuDevice=0):
+def CrossMapLRN(size, alpha, beta, k=1.0, device="cpu"):
 
     if CrossMapLRN2d is not None:
         lrn = CrossMapLRN2d(size, alpha, beta, k)
-        n = Lambda( lambda x,lrn=lrn: Variable(lrn.forward(x.data).cuda(gpuDevice)) if x.data.is_cuda else Variable(lrn.forward(x.data)) )
+        n = Lambda( lambda x,lrn=lrn: Variable(lrn.forward(x.data).to(device)) )
     else:
-        n = nn.LocalResponseNorm(size, alpha, beta, k).cuda(gpuDevice)
+        n = nn.LocalResponseNorm(size, alpha, beta, k).to(device)
     return n
 
 def Linear(in_dim, out_dim):
@@ -147,23 +142,22 @@ class Inception(nn.Module):
 
 
 class netOpenFace(nn.Module):
-    def __init__(self, useCuda, gpuDevice=0):
+    def __init__(self, device):
         super(netOpenFace, self).__init__()
-
-        self.gpuDevice = gpuDevice
+        self.device = device
 
         self.layer1 = Conv2d(3, 64, (7,7), (2,2), (3,3))
         self.layer2 = BatchNorm(64)
         self.layer3 = nn.ReLU()
         self.layer4 = nn.MaxPool2d((3,3), stride=(2,2), padding=(1,1))
-        self.layer5 = CrossMapLRN(5, 0.0001, 0.75, gpuDevice=gpuDevice)
+        self.layer5 = CrossMapLRN(5, 0.0001, 0.75, device=device)
         self.layer6 = Conv2d(64, 64, (1,1), (1,1), (0,0))
         self.layer7 = BatchNorm(64)
         self.layer8 = nn.ReLU()
         self.layer9 = Conv2d(64, 192, (3,3), (1,1), (1,1))
         self.layer10 = BatchNorm(192)
         self.layer11 = nn.ReLU()
-        self.layer12 = CrossMapLRN(5, 0.0001, 0.75, gpuDevice=gpuDevice)
+        self.layer12 = CrossMapLRN(5, 0.0001, 0.75, device=device)
         self.layer13 = nn.MaxPool2d((3,3), stride=(2,2), padding=(1,1))
         self.layer14 = Inception(192, (3,5), (1,1), (128,32), (96,16,32,64), nn.MaxPool2d((3,3), stride=(2,2), padding=(0,0)), True)
         self.layer15 = Inception(256, (3,5), (1,1), (128,64), (96,32,64,64), nn.LPPool2d(2, (3,3), stride=(3,3)), True)
@@ -179,19 +173,9 @@ class netOpenFace(nn.Module):
         self.resize1 = nn.UpsamplingNearest2d(scale_factor=3)
         self.resize2 = nn.AvgPool2d(4)
 
-        #
-        # self.eval()
-
-        if useCuda:
-            self.cuda(gpuDevice)
-
 
     def forward(self, input):
         x = input
-
-        if x.data.is_cuda and self.gpuDevice != 0:
-            x = x.cuda(self.gpuDevice)
-
         #
         if x.size()[-1] == 128:
             x = self.resize2(self.resize1(x))
