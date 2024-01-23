@@ -41,5 +41,7 @@ if __name__ == "__main__":
         plt.imshow(main_image, cmap='gray')
     
     plt.show()
+```
 
 ![alt text]([http://url/to/img.png](https://github.com/Ali-Fayzi/face-recognition/blob/master/face_detections_models.png?raw=true)https://github.com/Ali-Fayzi/face-recognition/blob/master/face_detections_models.png?raw=true)
+
