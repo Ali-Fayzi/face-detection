@@ -12,12 +12,18 @@ class Opencv_Face_Detection:
         bboxes      = []
         crops       = []
         image_copy = image.copy() if return_crops else None
+        image_height,image_width,image_channel = image.shape
+
         for bbox in face_bboxes:
             (x,y,w,h,)  = bbox
             x1,y1,x2,y2 = int(x) , int(y) , int(x+w) , int(y+h)
             bboxes.append([x1,y1,x2,y2])
             if return_crops:
-                crop    = image_copy[y1:y2 , x1:x2]
+                crop_x1 = max(x1,0)
+                crop_y1 = max(y1,0)
+                crop_x2 = min(x2,image_width)
+                crop_y2 = min(y2,image_height)
+                crop    = image_copy[crop_y1:crop_y2 , crop_x1:crop_x2]
                 crops.append(crop)
             if draw_bbox:
                 start_point = (x1, y1)

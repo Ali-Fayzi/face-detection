@@ -28,7 +28,7 @@ class Retina_Face_Detection:
         image_copy = image.copy() if return_crops else None
 
         output = self.model.predict_jsons(image)
-
+        image_height,image_width,image_channel = image.shape
         for out in output:
             x1,y1,x2,y2 = int(out['bbox'][0]),int(out['bbox'][1]),int(out['bbox'][2]),int(out['bbox'][3])
             keypoint    = out['landmarks']
@@ -38,7 +38,11 @@ class Retina_Face_Detection:
             if return_keypoints:
                 keypoints.append(keypoint)
             if return_crops:
-                crop    = image_copy[y1:y2 , x1:x2]
+                crop_x1 = max(x1,0)
+                crop_y1 = max(y1,0)
+                crop_x2 = min(x2,image_width)
+                crop_y2 = min(y2,image_height)
+                crop    = image_copy[crop_y1:crop_y2 , crop_x1:crop_x2]
                 crops.append(crop)
             if draw_bbox:
                 start_point = (x1, y1)

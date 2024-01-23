@@ -33,7 +33,6 @@ class MTCNN_Face_Detection:
                 crop_y1 = max(y1,0)
                 crop_x2 = min(x2,image_width)
                 crop_y2 = min(y2,image_height)
-
                 crop    = image_copy[crop_y1:crop_y2 , crop_x1:crop_x2]
                 crops.append(crop)
             if draw_bbox:
