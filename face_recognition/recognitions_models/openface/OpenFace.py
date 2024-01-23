@@ -12,7 +12,7 @@ class OpenFace:
 
         weight_path = check_weight_exists()
         self.model = netOpenFace(self.useCuda, gpuDevice)
-        self.model.load_state_dict(torch.load(weight_path))
+        self.model.load_state_dict(torch.load(weight_path),map_location=self.device)
         self.model.eval()
     
     def preprocess(self,image):
