@@ -4,6 +4,6 @@ opencv_contrib_python==4.8.1.78
 opencv_python==4.7.0.72
 opencv_python_headless==4.8.0.74
 Pillow==9.5.0
-torch==1.13.1
+torch
 ultralytics==8.0.222
-retinaface-pytorch==0.0.8
+retinaface-pytorch
