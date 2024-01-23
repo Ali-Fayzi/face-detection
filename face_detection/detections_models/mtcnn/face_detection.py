@@ -8,9 +8,11 @@ from facenet_pytorch import MTCNN
 class MTCNN_Face_Detection:
     def __init__(self):
         self.model = MTCNN(image_size=640)
+        self.warmup()
 
     def warmup(self):
         input = np.ones((640,640,3))
+        self.model.detect(input,landmarks=True)
         print("MTCNN Model Warmup Is Done!") 
 
     def detect(self, image, return_crops=False, return_keypoints=False, draw_bbox=False,draw_keypoint=False):
