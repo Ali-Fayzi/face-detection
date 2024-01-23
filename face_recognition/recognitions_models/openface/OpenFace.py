@@ -2,8 +2,8 @@ import os
 import cv2 
 import torch 
 import numpy as np 
-from model import netOpenFace
-from check_weight import check_weight_exists
+from face_recognition.recognitions_models.openface.model import netOpenFace
+from face_recognition.recognitions_models.openface.check_weight import check_weight_exists
 class OpenFace:
     def __init__(self):
         self.useCuda = True if torch.cuda.is_available() else False
