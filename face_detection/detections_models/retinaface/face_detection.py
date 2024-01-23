@@ -6,13 +6,15 @@ pip install -U retinaface_pytorch
 
 """
 import cv2
+import torch 
 import numpy as np 
 from retinaface.pre_trained_models import get_model
 
 
 class Retina_Face_Detection:
     def __init__(self):
-        self.model = get_model("resnet50_2020-07-20", max_size=2048)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = get_model("resnet50_2020-07-20", max_size=2048 , device=device)
         self.model.eval()
         self.warmup()
 
