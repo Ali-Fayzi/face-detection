@@ -13,8 +13,8 @@ from retinaface.pre_trained_models import get_model
 
 class Retina_Face_Detection:
     def __init__(self):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = get_model("resnet50_2020-07-20", max_size=2048 , device=device)
+        device = torch.device("cuda"  if torch.cuda.is_available() else "cpu")
+        self.model = get_model("resnet50_2020-07-20", max_size=640 , device=device)
         self.model.eval()
         self.warmup()
 
