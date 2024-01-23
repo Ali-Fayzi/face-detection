@@ -7,6 +7,30 @@ from detections_models.yolov8_face.face_detection import Yolo_Face_Detection
 from detections_models.retinaface.face_detection import Retina_Face_Detection
 from detections_models.mtcnn.face_detection import MTCNN_Face_Detection
 
+
+class Face_Detection:
+
+    def __init__(self,model_name):
+        self.model_name = model_name
+        if model_name == "opencv":
+            self.face_detection = Opencv_Face_Detection()
+        elif model_name == "yolo":
+             self.face_detection = Yolo_Face_Detection()
+        elif model_name == "retinaface":
+             self.face_detection = Retina_Face_Detection()
+        elif model_name == "mtcnn":
+             self.face_detection = MTCNN_Face_Detection()
+        else:
+            print(f"Model {model_name} Not Implemented!")
+
+    def detect(self, image, return_crops=False, return_keypoints=False, draw_bbox=False,draw_keypoint=False):
+        if self.model_name != "opencv":
+            image, bboxes, keypoints, crops  = face_detection.detect(image=image,return_crops=return_crops,return_keypoints=return_keypoints,draw_bbox=draw_bbox,draw_keypoint=draw_keypoint)
+            return image, bboxes, keypoints, crops 
+        else:
+            image, bboxes, crops = self.face_detection.detect(image=image,return_crops=return_crops,draw_bbox=draw_bbox)
+            return image, bboxes, crops 
+
 if __name__ == "__main__":
     image_path     = r"./test_images/1.png"
     image          = cv2.imread(image_path)
