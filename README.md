@@ -43,5 +43,5 @@ if __name__ == "__main__":
     plt.show()
 ```
 
-![alt text]([http://url/to/img.png](https://github.com/Ali-Fayzi/face-recognition/blob/master/face_detections_models.png?raw=true)https://github.com/Ali-Fayzi/face-recognition/blob/master/face_detections_models.png)
+![alt text]([http://url/to/img.png]https://github.com/Ali-Fayzi/face-recognition/blob/master/face_detections_models.png)
 
