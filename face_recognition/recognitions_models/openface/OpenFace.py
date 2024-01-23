@@ -6,13 +6,13 @@ from face_recognition.recognitions_models.openface.model import netOpenFace
 from face_recognition.recognitions_models.openface.check_weight import check_weight_exists
 class OpenFace:
     def __init__(self):
-        self.useCuda = True if torch.cuda.is_available() else False
+        self.useCuda = False #True if torch.cuda.is_available() else False
         gpuDevice = 0 if self.useCuda else None
         self.device  = torch.device("cuda" if self.useCuda else "cpu")
 
         weight_path = check_weight_exists()
         self.model = netOpenFace(self.useCuda, gpuDevice)
-        self.model.load_state_dict(torch.load(weight_path),map_location=self.device)
+        self.model.load_state_dict(torch.load(weight_path,map_location=self.device))
         self.model.eval()
     
     def preprocess(self,image):
