@@ -46,4 +46,4 @@ if __name__ == "__main__":
     
     plt.show()
 ```
-![Face Detection Result](https://raw.githubusercontent.com/Ali-Fayzi/face-recognition/master/face_detections_models.png)
+![Face Detection Result](https://raw.githubusercontent.com/Ali-Fayzi/face-recognition/master/face_detection_compare.png)
