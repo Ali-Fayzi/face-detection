@@ -4,6 +4,7 @@ import cv2
 from matplotlib import pyplot as plt 
 from face_detection.detections import Face_Detection
 from face_alignment.simple_alignment.align import Simple_Alignment
+from face_recognition.recognitions_models.openface.OpenFace import OpenFace
 if __name__ == "__main__":
     print("Face Detection Model")
 
@@ -26,13 +27,21 @@ if __name__ == "__main__":
     plt.imshow(image,cmap='gray')
     plt.show()
 
+    aligned_faces = []
     if face_detection_models != "opencv":
         face_alignment = Simple_Alignment()
         for face , keypoint in zip(crops,keypoints):
             main_face , aligned_face = face_alignment.align(face,keypoint)
+            aligned_faces.append(aligned_face)
             plt.subplot(1,2,1)
             plt.imshow(face,cmap='gray')
             plt.subplot(1,2,2)
             plt.imshow(aligned_face,cmap='gray')
             plt.show()
 
+    if len(aligned_faces) > 0 :
+        # face recognition model
+        openface = OpenFace()
+        for face in aligned_faces:
+            embedding = openface.predict(image=face)
+            print(embedding.shape)
