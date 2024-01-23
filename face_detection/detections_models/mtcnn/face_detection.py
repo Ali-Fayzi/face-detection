@@ -1,44 +1,40 @@
 """
-
-https://github.com/ternaus/retinaface
-pip install -U retinaface_pytorch
-
-
+https://github.com/timesler/facenet-pytorch
 """
-import cv2
+import cv2 
 import numpy as np 
-from retinaface.pre_trained_models import get_model
+from facenet_pytorch import MTCNN
 
-
-class Retina_Face_Detection:
+class MTCNN_Face_Detection:
     def __init__(self):
-        self.model = get_model("resnet50_2020-07-20", max_size=2048)
-        self.model.eval()
-        self.warmup()
+        self.model = MTCNN(image_size=640)
 
     def warmup(self):
         input = np.ones((640,640,3))
-        self.model.predict_jsons(input)
-        print("Retina Model Warmup Is Done!")
+        print("MTCNN Model Warmup Is Done!") 
+
     def detect(self, image, return_crops=False, return_keypoints=False, draw_bbox=False,draw_keypoint=False):
         assert image is not None , "Image is None!"
         bboxes      = []
         crops       = []
         keypoints   = []
         image_copy = image.copy() if return_crops else None
-
-        output = self.model.predict_jsons(image)
-
-        for out in output:
-            x1,y1,x2,y2 = int(out['bbox'][0]),int(out['bbox'][1]),int(out['bbox'][2]),int(out['bbox'][3])
-            keypoint    = out['landmarks']
-            keypoint    = [ (int(item[0]),int(item[1])) for item in keypoint]
-
+        
+        image_height,image_width,image_channel = image.shape
+        boxes, probs, points = self.model.detect(image,landmarks=True)
+        for box , point in zip(boxes,points):
+            x1,y1,x2,y2 = int(box[0]),int(box[1]),int(box[2]),int(box[3])
+            keypoint    = [ (int(item[0]),int(item[1])) for item in point]
             bboxes.append([x1,y1,x2,y2])
             if return_keypoints:
                 keypoints.append(keypoint)
             if return_crops:
-                crop    = image_copy[y1:y2 , x1:x2]
+                crop_x1 = max(x1,0)
+                crop_y1 = max(y1,0)
+                crop_x2 = min(x2,image_width)
+                crop_y2 = min(y2,image_height)
+
+                crop    = image_copy[crop_y1:crop_y2 , crop_x1:crop_x2]
                 crops.append(crop)
             if draw_bbox:
                 start_point = (x1, y1)
@@ -53,5 +49,8 @@ class Retina_Face_Detection:
                     color = (255, 0, 0) 
                     thickness = -1
                     image = cv2.circle(image, center_coordinates, radius, color, thickness) 
+
+
+        
 
         return image, bboxes, keypoints, crops 
