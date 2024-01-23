@@ -1,3 +1,6 @@
+"""
+https://github.com/derronqi/yolov8-face
+"""
 import cv2
 import numpy as np 
 from ultralytics import YOLO

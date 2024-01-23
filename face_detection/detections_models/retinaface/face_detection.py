@@ -1,3 +1,10 @@
+"""
+
+https://github.com/ternaus/retinaface
+pip install -U retinaface_pytorch
+
+
+"""
 import cv2
 from retinaface.pre_trained_models import get_model
 
