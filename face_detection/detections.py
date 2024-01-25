@@ -15,7 +15,7 @@ class Face_Detection:
             self.face_detection = Opencv_Face_Detection()
         elif model_name == "yolo":
              self.face_detection = Yolo_Face_Detection()
-        elif model_name == "retinaface_v1":
+        elif model_name == "retinaface_v1": 
              self.face_detection = Retina_Face_Detection_v1()
         elif model_name == "retinaface_v2":
              self.face_detection = Retina_Face_Detection_v2()
