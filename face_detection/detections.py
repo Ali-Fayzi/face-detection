@@ -2,7 +2,8 @@ import cv2
 from matplotlib import pyplot as plt  
 from face_detection.detections_models.opencv.face_detection import Opencv_Face_Detection
 from face_detection.detections_models.yolov8_face.face_detection import Yolo_Face_Detection
-from face_detection.detections_models.retinaface.face_detection import Retina_Face_Detection
+from face_detection.detections_models.retinaface.face_detection import Retina_Face_Detection as Retina_Face_Detection_v1
+from face_detection.detections_models.retinaface.face_detection_v2 import Retina_Face_Detection as Retina_Face_Detection_v2
 from face_detection.detections_models.mtcnn.face_detection import MTCNN_Face_Detection
 
 
@@ -14,8 +15,10 @@ class Face_Detection:
             self.face_detection = Opencv_Face_Detection()
         elif model_name == "yolo":
              self.face_detection = Yolo_Face_Detection()
-        elif model_name == "retinaface":
-             self.face_detection = Retina_Face_Detection()
+        elif model_name == "retinaface_v1":
+             self.face_detection = Retina_Face_Detection_v1()
+        elif model_name == "retinaface_v2":
+             self.face_detection = Retina_Face_Detection_v2()
         elif model_name == "mtcnn":
              self.face_detection = MTCNN_Face_Detection()
         else:
@@ -34,7 +37,7 @@ if __name__ == "__main__":
     image          = cv2.imread(image_path)
     image          = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     # create opencv face detection instance
-    face_detection_models = ["opencv","yolo","retinaface","mtcnn"]
+    face_detection_models = ["opencv","yolo","retinaface_v1","retinaface_v2","mtcnn"]
 
     face_detection_model = face_detection_models[-1]
 
