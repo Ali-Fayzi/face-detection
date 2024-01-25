@@ -2,6 +2,8 @@ import os
 import cv2
 import time
 import torch
+import shutil
+import gdown
 import numpy as np
 import torch.backends.cudnn as cudnn
 from face_detection.detections_models.retinaface.pytorch_retina.data import cfg_mnet, cfg_re50
@@ -40,17 +42,37 @@ def load_model(model, pretrained_path, load_to_cpu):
     model.load_state_dict(pretrained_dict, strict=False)
     return model
 
+def check_weight_exists(weight_path="./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenetV1X0.25_pretrain.tar"):
+    if os.path.exists(weight_path):
+        return weight_path
+    else:
+        url = ""
+        if weight_path == "./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenet0.25_Final.pth":
+            url = "https://drive.google.com/uc?id=15zP8BP-5IvWXWZoYTNdvUJUiBqZ1hxu1"
+            # mobilenet0.25_Final.pth
+        elif weight_path == "./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenetV1X0.25_pretrain.tar":
+            url = "https://drive.google.com/uc?id=1q36RaTZnpHVl4vRuNypoEMVWiiwCqhuD"
+            # mobilenetV1X0.25_pretrain.tar
+        else:
+            url = "https://drive.google.com/uc?id=14KX6VqF69MdSPk3Tr9PlDYbq7ArpdNUW"
+            # Resnet50_Final.pth
+        print("Start Download [Backbone Weight]")
+        destination_directory = "./face_detection/detections_models/retinaface/pytorch_retina/weights/"
+        os.makedirs(destination_directory, exist_ok=True)
+        gdown.download(url,output=weight_path,  quiet=False)
+        print("Weight Downloaded!")
+        return ""
 
 
 class Retina_Face_Detection:
-    def __init__(self):
+    def __init__(self,backbone="resnet50"):
         networks = {
-            0 : ["mobile0.25","./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenet0.25_Final.pth"],
-            1 : ["resnet50", "./face_detection/detections_models/retinaface/pytorch_retina/weights/Resnet50_Final.pth"]
+            "mobile0.25" : "./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenet0.25_Final.pth",
+            "resnet50" : "./face_detection/detections_models/retinaface/pytorch_retina/weights/Resnet50_Final.pth"
         }
-        net_index = 0
-        network = networks[net_index][0]
-        trained_model = networks[net_index][1]
+        network = backbone
+        trained_model = networks[backbone]
+        check_weight_exists(trained_model)
         cpu = False if not torch.cuda.is_available() else True 
         self.confidence_threshold = 0.1
         self.keep_top_k = 750
@@ -76,10 +98,9 @@ class Retina_Face_Detection:
         self.warmup()
 
     def warmup(self):
-        return True 
-        input = np.ones((640,640,3))
-        self.model.predict_jsons(input)
-        print("Retina Model Warmup Is Done!")
+        input = np.float32(np.ones((3,320,320)))
+        self.net(torch.from_numpy(input).unsqueeze(0).to(self.device))
+        print("RetinaV2 Model Warmup Is Done!")
     
     def preprocess(self,image):
         img = np.float32(image)
