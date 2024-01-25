@@ -22,7 +22,7 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=(20, 10))
     
     # create face detection instance
-    face_detection_models = ["opencv", "yolo", "retinaface", "mtcnn"]
+    face_detection_models = ["opencv", "yolo", "retinaface_v1","retinaface_v2", "mtcnn"]
     
     for idx, face_detector in enumerate(face_detection_models):
         image_path        = r"./test_images/1.png"
