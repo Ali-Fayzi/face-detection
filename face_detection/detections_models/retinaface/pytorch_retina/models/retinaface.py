@@ -57,7 +57,11 @@ class RetinaFace(nn.Module):
         if cfg['name'] == 'mobilenet0.25':
             backbone = MobileNetV1()
             if cfg['pretrain']:
-                checkpoint = torch.load("./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenetV1X0.25_pretrain.tar", map_location=torch.device('cpu'))
+
+                weight_path = "./face_detection/detections_models/retinaface/pytorch_retina/weights/mobilenetV1X0.25_pretrain.tar"
+                from face_detection.detections_models.retinaface.face_detection_v2 import check_weight_exists
+                check_weight_exists(weight_path=weight_path)
+                checkpoint = torch.load(weight_path, map_location=torch.device('cpu'))
                 from collections import OrderedDict
                 new_state_dict = OrderedDict()
                 for k, v in checkpoint['state_dict'].items():
