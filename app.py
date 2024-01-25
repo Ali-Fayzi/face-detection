@@ -1,6 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore")
 import cv2 
+from time import time 
 from matplotlib import pyplot as plt 
 from face_detection.detections import Face_Detection
 from face_alignment.simple_alignment.align import Simple_Alignment
@@ -12,20 +13,29 @@ if __name__ == "__main__":
     image          = cv2.imread(image_path)
     image          = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     # create opencv face detection instance
-    face_detection_models = ["opencv","yolo","retinaface","mtcnn"]
-    face_detection = Face_Detection(model_name=face_detection_models[-1])
-    #detect method
-    return_crops=True
-    return_keypoints=True
-    draw_bbox=True
-    draw_keypoint=True
-    image, bboxes,keypoints, crops  = face_detection.detect(image=image,
-                                                            return_crops=return_crops,
-                                                            return_keypoints=return_keypoints,
-                                                            draw_bbox=draw_bbox,
-                                                            draw_keypoint=draw_keypoint)
-    plt.imshow(image,cmap='gray')
+    face_detection_models = ["opencv","yolo","retinaface_v1","retinaface_v2","mtcnn"]
+    for idx, face_detector in enumerate(face_detection_models):
+        image_path        = r"./test_images/1.png"
+        image             = cv2.imread(image_path)
+        image             = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        tic = time()
+        face_detection    = Face_Detection(model_name=face_detector)
+        return_crops      = True
+        return_keypoints  = True if face_detector != "opencv" else False
+        draw_bbox         = True
+        draw_keypoint     = True if face_detector != "opencv" else False 
+        main_image, bboxes, keypoints, crops  = face_detection.detect(image=image,
+                                                                  return_crops=return_crops,
+                                                                  return_keypoints=return_keypoints,
+                                                                  draw_bbox=draw_bbox,
+                                                                  draw_keypoint=draw_keypoint)
+        toc = time()
+        plt.subplot(1, len(face_detection_models), idx+1)
+        plt.title(f"Detector : {face_detector} , time:{toc-tic:.4} S")
+        plt.imshow(main_image, cmap='gray')
+    
     plt.show()
+
 
     aligned_faces = []
     if face_detection_models != "opencv":
