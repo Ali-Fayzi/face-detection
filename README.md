@@ -1,4 +1,4 @@
-# Face Recognition Project
+# Face Detection Project
 
 ## Overview
 This project implements four different face detection algorithms: OpenCV Haar Cascade, YOLOv8Face, RetinaFace, and MTCNN. It provides a Python module for face detection with visualization options.
